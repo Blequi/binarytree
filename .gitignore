@@ -1,0 +1,4 @@
+*.out
+*.xml
+*.html
+output/coverage/report/binarytree.lua
