@@ -649,3 +649,136 @@ describe("binary tree construction", function()
         assert_table_and_tree_are_backward_equals(sorted_values, tree)
     end)
 end)
+
+describe("find method", function()
+    it("should return false for elements inside a newly created tree", function()
+        local tree = binarytree()
+
+        local values = {0, -1, 1, '-1', '1', function() end, {}, false, true, nil}
+
+        for i, v in ipairs(values) do
+            local found, element = tree:find(v)
+    
+            assert.False(found)
+            assert.are.equals(nil, element)
+        end
+    end)
+
+    
+    it("should return true for elements that belong to collection, for all permutations up to 4 elements", function()
+        local sorted_collection = {}
+        for i = 1, 4 do
+            table.insert(sorted_collection, i)
+
+            local work_collection = {}
+            for j, v in ipairs(sorted_collection) do
+                table.insert(work_collection, v)
+            end
+
+            for test_collection in permutations(work_collection) do
+                local tree = binarytree()
+                for k, v in ipairs(test_collection) do
+                    tree:add(v)
+                end
+                
+                for j, v in ipairs(test_collection) do
+                    local found, element = tree:find(v)
+
+                    assert.True(found)
+                    assert.are.equals(v, element)
+                end
+            end
+        end
+    end)
+
+    
+    it("should return false for elements that do not belong to collection, for all permutations up to 4 elements", function()
+        local lookup_elements = {-1, 10, 3.2}
+        
+        local sorted_collection = {}
+        for i = 1, 4 do
+            table.insert(sorted_collection, i)
+
+            local work_collection = {}
+            for j, v in ipairs(sorted_collection) do
+                table.insert(work_collection, v)
+            end
+
+            for test_collection in permutations(work_collection) do
+                local tree = binarytree()
+                for k, v in ipairs(test_collection) do
+                    tree:add(v)
+                end
+                
+                for j, v in ipairs(lookup_elements) do
+                    local found, element = tree:find(v)
+
+                    assert.False(found)
+                    assert.are.equals(nil, element)
+                end
+            end
+        end
+    end)
+
+    it("should return true for objects found by key 'a'", function()
+        local comparer = function(a, b) return a.a - b.a end
+
+        local tree = binarytree(comparer)
+
+        local one = {a = 1, b = 's'}
+        local five = {a = 5, b = 't'}
+        local minus_one = {a = -1, b = 'u'}
+
+        tree:add(one)
+        tree:add(five)
+        tree:add(minus_one)
+
+        local found, element = tree:find({a = 1})
+
+        assert.True(found)
+        assert.are.equals(one.a, element.a)
+        assert.are.equals(one.b, element.b)
+        
+        found, element = tree:find({a = 5})
+
+        assert.True(found)
+        assert.are.equals(five.a, element.a)
+        assert.are.equals(five.b, element.b)
+
+        found, element = tree:find({a = -1})
+
+        assert.True(found)
+        assert.are.equals(minus_one.a, element.a)
+        assert.are.equals(minus_one.b, element.b)
+    end)
+
+
+    it("should return false for objects not found by key 'a'", function()
+        local comparer = function(a, b) return a.a - b.a end
+
+        local tree = binarytree(comparer)
+
+        local one = {a = 1, b = 's'}
+        local five = {a = 5, b = 't'}
+        local minus_one = {a = -1, b = 'u'}
+
+        tree:add(one)
+        tree:add(five)
+        tree:add(minus_one)
+
+        local found, element = tree:find({a = 4})
+
+        assert.False(found)
+        assert.are.equals(nil, element)
+
+        found, element = tree:find({a = 8})
+
+        assert.False(found)
+        assert.are.equals(nil, element)
+        
+        found, element = tree:find({a = 3.2})
+
+        assert.False(found)
+        assert.are.equals(nil, element)
+    end)
+end)

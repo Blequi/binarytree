@@ -26,12 +26,14 @@
     * [clear](#clear)
     * [contains](#contains)
     * [empty](#empty)
+    * [find](#find)
     * [first](#first)
     * [iterator](#iterator)
     * [last](#last)
     * [remove](#remove)
 * [Unit Tests](#unit-tests)
 * [Code Coverage](#code-coverage)
+* [Change Log](#change-log)
 
 ## Summary
 
@@ -164,7 +166,7 @@ print( tree:last() ) -- prints "e"
 
 ### Examples with objects
 
-* First example: sort by fruit's price
+* First example: sort by fruit's price.
 ```lua
 -- loading the module
 local binarytree = require("binarytree")
@@ -210,7 +212,7 @@ print()
 print( fruits:first().name ) -- prints "banana"
 print( fruits:last().name ) -- prints "apple"
 ```
-* Second example: sort by collaborator's name
+* Second example: sort by collaborator's name.
 ```lua
 -- loading the module
 local binarytree = require("binarytree")
@@ -303,7 +305,7 @@ print( tree:last() ) -- prints 3
 ```
 
 ## Constructors
-* *Description*: creates a new binary tree's instance
+* *Description*: creates a new binary tree's instance.
 * *Signature*: ```(comparer, distinct)```
     * *comparer (function - can be nil)*: A function to compare elements. This function takes parameters ```a```, ```b``` and issues an integer comparing them (```(a, b) -> integer```). The basic idea is that:
         * ```a == b -> 0```
@@ -455,7 +457,7 @@ print(tree_desc.comparer(15, 15)) -- the descending comparer will emit 0
 
 ### count
 
-* *Description*: the number of elements in the binary tree
+* *Description*: the number of elements in the binary tree.
 * *Signature*: ```count```
     * *return (integer)*
 * *Example*:
@@ -528,11 +530,11 @@ print(tree2.distinct) -- prints nil
 ## Methods
 
 ### add
-* *Description*: adds an element to the binary tree
+* *Description*: adds an element to the binary tree.
 * *Signature*: ```add(value)```
     * *value (object)*: the element to be added
     * *return (void)*
-* *Exception*: will raise error if ```distinct``` is activated and ```value``` is already in the binary tree. For more information, take a look: [example ensuring distinct elements](#example-ensuring-distinct-elements)
+* *Exception*: will raise error if ```distinct``` is activated and ```value``` is already in the binary tree. For more information, take a look: [example ensuring distinct elements](#example-ensuring-distinct-elements).
 * *Example*:
 ```lua
 -- loading the module
@@ -562,7 +564,7 @@ end
 ```
 
 ### clear
-* *Description*: removes all the elements from the binary tree
+* *Description*: removes all the elements from the binary tree.
 * *Signature*: ```clear()```
     * *return (void)*
 * *Example*:
@@ -597,9 +599,9 @@ print(tree.count)
 ```
 
 ### contains
-* *Description*: verifies the presence of a given element in the binary tree
+* *Description*: verifies the presence of a given element in the binary tree.
 * *Signature*: ```contains(value)```
-    * *value (object)*: element to search
+    * *value (object)*: element to search.
     * *return (boolean)*
 * *Example*:
 ```lua
@@ -624,7 +626,7 @@ print()
 ```
 
 ### empty
-* *Description*: verifies the absence of elements in the binary tree
+* *Description*: verifies the absence of elements in the binary tree.
 * *Signature*: ```empty()```
     * *return (boolean)*
 * *Example*:
@@ -644,11 +646,87 @@ tree:add(1)
 print(tree:empty()) -- prints false
 ```
 
+### find
+* *Description*: tries to find the first element (forward direction) in the binary tree matching value.
+* *Signature*: ```first(value)```
+    * *value (object)*: the element to lookup in the tree
+    * *return (boolean, object)*: the first return value indicates whether the element was found or not (true or false), while the second will be the original element added to the collection or nil if it was not there.
+* *Example*:
+    * First example: finding numbers
+    ```lua
+    -- loading the module
+    local binarytree = require("binarytree")
+
+    -- creating a binary tree instance using the default comparer for numbers
+    local tree = binarytree()
+
+    -- adding numbers to it
+    tree:add(3)
+    tree:add(1)
+    tree:add(2)
+    tree:add(1)
+    tree:add(-1)
+    tree:add(0)
+
+    -- the first return value
+    -- is a boolean (false 'or' true)
+    -- while the second is the element
+    -- in the tree in the case the element
+    -- was there.
+    local found, element = tree:find(3)
+
+    print(found, element) -- prints: true, 3 
+
+    -- for elements out of the tree,
+    -- the response is always: false, nil
+    found, element = tree:find(10)
+
+    print(found, element) -- prints: false, nil
+    ```
+    * Second example: finding collaborators by name:
+    ```lua
+    -- loading the module
+    local binarytree = require("binarytree")
+
+    -- comparer to sort collaborators by name
+    local function collaborators_name_comparer(a, b)
+        local a_name = a.name
+        local b_name = b.name
+
+        return (a_name == b_name) and 0 or (a_name < b_name and -1 or 1)
+    end
+
+    -- creating a binary tree to hold collaborators sorted by name
+    local collaborators = binarytree(collaborators_name_comparer)
+
+    -- adding collaborators
+    collaborators:add({name = 'Bob', age = 21})
+    collaborators:add({name = 'Alice', age = 34})
+    collaborators:add({name = 'John', age = 32})
+    collaborators:add({name = 'James', age = 20})
+
+    -- the interesting use case for this 'find' function
+    -- targets objects. For instance, if later in the code
+    -- we only have the collaborator's name, it is possible
+    -- to retrieve the whole information about person
+    -- from the original element added to the tree.
+    local found_bob, bob = collaborators:find({name = 'Bob'})
+
+    print(found_bob, bob.name, bob.age) -- prints: true Bob 21
+
+    local found_john, john = collaborators:find({name = 'John'})
+
+    print(found_john, john.name, john.age) -- prints: true  John    32
+
+    local found_olivia, olivia = collaborators:find({name = 'Olivia'})
+
+    print(found_olivia, olivia) -- prints: false, nil
+    ```
 ### first
-* *Description*: gets the first element (forward direction) in the binary tree
+* *Description*: gets the first element (forward direction) in the binary tree.
 * *Signature*: ```first()```
-    * *return (object)*
-* *Exception*: will raise error if binary tree is empty
+    * *return (object)*: the first element.
+* *Exception*: will raise error if binary tree is empty.
 * *Example*:
 ```lua
 -- loading the module
@@ -669,10 +747,10 @@ print( tree:first() ) -- prints -1
 ```
 
 ### iterator
-* *Description*: iterates the binary tree in forward or backward direction
+* *Description*: iterates the binary tree in forward or backward direction.
 * *Signature*: ```iterator(backward)```
-    * *backward (object - can be nil)*: flag to indicate if the iteration will be in the backward direction
-    * *return (thread)*
+    * *backward (object - can be nil)*: flag to indicate if the iteration will be in the backward direction.
+    * *return (thread)*: a coroutine to iterate the tree.
 * *Example*:
 ```lua
 -- loading the module
@@ -716,10 +794,10 @@ end
 ```
 
 ### last
-* *Description*: gets the last element (forward direction) in the binary tree
+* *Description*: gets the last element (forward direction) in the binary tree.
 * *Signature*: ```last()```
     * *return (object)*
-* *Exception*: will raise error if binary tree is empty
+* *Exception*: will raise error if binary tree is empty.
 * *Example*:
 ```lua
 -- loading the module
@@ -740,11 +818,11 @@ print( tree:first() ) -- prints 3
 ```
 
 ### remove
-* *Description*: removes an element to the binary tree
+* *Description*: removes an element to the binary tree.
 * *Signature*: ```remove(value, all)```
-    * *value (object)*: the element to be removed
+    * *value (object)*: the element to be removed.
     * *all (object - can be nil)*: flag indicating where all the occurrences should be removed. If ```nil``` or ```false``` is passed (the usual form), at most one element will be removed.
-    * *return (integer)*: the number of elements removed
+    * *return (integer)*: the number of elements removed.
 * *Example*:
 ```lua
 -- loading the module
@@ -827,3 +905,8 @@ lua -lluacov test.lua
 ```
 
 Once the program finished, navigate to directory ```output > coverage > report``` and open the generated html files on your browser to analyze the code coverage report.
+
+## Change Log
+
+* Version 0.0.2-0: added ```find(value)``` method to the binary tree. See [Find](#find) for more information.
+* Version 0.0.1-0: initial release.

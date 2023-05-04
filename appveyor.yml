@@ -1,4 +1,4 @@
-version: 0.0.1-0-{build}-{branch}
+version: 0.0.2-0-{build}-{branch}
 
 shallow_clone: true
 
@@ -31,7 +31,7 @@ test_script:
 - lua -lluacov test.lua
 
 after_test:
-- luarocks make binarytree-0.0.1-0.rockspec
+- luarocks make binarytree-0.0.2-0.rockspec
 - lua -e "print(require('binarytree') == nil and 'Unable to use binarytree module' or 'binarytree rock installed')"
 
 on_success:

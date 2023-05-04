@@ -440,6 +440,15 @@ local function add(self, value)
     self.count = self.count + 1
 end
 
+local function find(self, value)
+    local found, element = find_node(self, value)
+    local result = nil
+    if (found) then
+        result = element:get_value()
+    end
+    return found, result
+end
+
 local function create(comparer, distinct)
     if (comparer ~= nil) then
         local tcomparer = type(comparer)
@@ -461,6 +470,7 @@ local function create(comparer, distinct)
         clear = function(self) clear(data) end,
         contains = function(self, value) return contains(data, value) end,
         empty = function(self) return empty(data) end,
+        find = function(self, value) return find(data, value) end,
         first = function(self) return first(data) end,
         iterator = function(self, backward) return iterator(data, backward) end,
         last = function(self) return last(data) end,
