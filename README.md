@@ -124,7 +124,7 @@ local binarytree = require("binarytree")
 -- creating a binary tree instance using the default comparer for strings
 local tree = binarytree()
 
--- adding numbers to it
+-- adding strings to it
 tree:add("e")
 tree:add("c")
 tree:add("d")
@@ -176,7 +176,7 @@ local fruits = binarytree(function(a, b)
     return a.price - b.price
 end)
 
--- adding numbers to it
+-- adding "fruit objects" to it
 fruits:add({name = 'orange', price = 20})
 fruits:add({name = 'apple', price = 25})
 fruits:add({name = 'banana', price = 15})
@@ -251,8 +251,9 @@ end
 -- loading the module
 local binarytree = require("binarytree")
 
--- creating a binary tree instance using the default comparer for numbers,
--- but ensuring elements are distinct
+-- creating a binary tree instance using
+-- the default comparer for numbers (first parameter = nil),
+-- but ensuring elements are distinct (second parameter = true)
 local tree = binarytree(nil, true)
 
 -- adding numbers to it
@@ -604,51 +605,80 @@ print(tree.count)
     * *value (object)*: element to search.
     * *return (boolean)*
 * *Example*:
-```lua
--- loading the module
-local binarytree = require("binarytree")
+    * First example: contains numbers
+    ```lua
+    -- loading the module
+    local binarytree = require("binarytree")
 
--- creating a binary tree instance using the default comparer for numbers
-local tree = binarytree()
+    -- creating a binary tree instance using the default comparer for numbers
+    local tree = binarytree()
 
--- adding numbers to it
-tree:add(3)
-tree:add(1)
-tree:add(2)
-tree:add(1)
-tree:add(-1)
-tree:add(0)
+    -- adding numbers to it
+    tree:add(3)
+    tree:add(1)
+    tree:add(2)
+    tree:add(1)
+    tree:add(-1)
+    tree:add(0)
 
-print()
-print(tostring( tree:contains(-8) )) -- false
-print(tostring( tree:contains(1) )) -- true
-print()
-```
+    print()
+    print(tostring( tree:contains(-8) )) -- false
+    print(tostring( tree:contains(1) )) -- true
+    print()
+    ```
+    * Second example: contains collaborator by name
+    ```lua
+    -- loading the module
+    local binarytree = require("binarytree")
 
-### empty
-* *Description*: verifies the absence of elements in the binary tree.
-* *Signature*: ```empty()```
-    * *return (boolean)*
-* *Example*:
-```lua
--- loading the module
-local binarytree = require("binarytree")
+    -- comparer to sort collaborators by name
+    local function collaborators_name_comparer(a, b)
+        local a_name = a.name
+        local b_name = b.name
 
--- creating a binary tree instance using the default comparer for numbers
-local tree = binarytree()
+        return (a_name == b_name) and 0 or (a_name < b_name and -1 or 1)
+    end
 
-print(tree:empty()) -- prints true
+    -- creating a binary tree to hold collaborators sorted by name
+    local collaborators = binarytree(collaborators_name_comparer)
 
--- adding numbers to it
-tree:add(3)
-tree:add(1)
+    -- adding collaborators
+    collaborators:add({name = 'Bob', age = 21})
+    collaborators:add({name = 'Alice', age = 34})
+    collaborators:add({name = 'John', age = 32})
+    collaborators:add({name = 'James', age = 20})
 
-print(tree:empty()) -- prints false
-```
+    print( collaborators:contains({name = 'Bob'}) ) -- prints true
+
+    print( collaborators:contains({name = 'John'}) ) -- prints true
+
+    print( collaborators:contains({name = 'Olivia'}) ) -- prints false
+    ```
+
+    ### empty
+    * *Description*: verifies the absence of elements in the binary tree.
+    * *Signature*: ```empty()```
+        * *return (boolean)*
+    * *Example*:
+    ```lua
+    -- loading the module
+    local binarytree = require("binarytree")
+
+    -- creating a binary tree instance using the default comparer for numbers
+    local tree = binarytree()
+
+    print(tree:empty()) -- prints true
+
+    -- adding numbers to it
+    tree:add(3)
+    tree:add(1)
+
+    print(tree:empty()) -- prints false
+    ```
 
 ### find
 * *Description*: tries to find the first element (forward direction) in the binary tree matching value.
-* *Signature*: ```first(value)```
+* *Signature*: ```find(value)```
     * *value (object)*: the element to lookup in the tree
     * *return (boolean, object)*: the first return value indicates whether the element was found or not (true or false), while the second will be the original element added to the collection or nil if it was not there.
 * *Example*:
@@ -814,7 +844,7 @@ tree:add(1)
 tree:add(-1)
 tree:add(0)
 
-print( tree:first() ) -- prints 3
+print( tree:last() ) -- prints 3
 ```
 
 ### remove

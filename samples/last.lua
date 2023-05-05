@@ -12,4 +12,4 @@ tree:add(1)
 tree:add(-1)
 tree:add(0)
 
-print( tree:first() ) -- prints 3
+print( tree:last() ) -- prints 3

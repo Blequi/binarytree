@@ -4,7 +4,7 @@ local binarytree = require("binarytree")
 -- creating a binary tree instance using the default comparer for strings
 local tree = binarytree()
 
--- adding numbers to it
+-- adding strings to it
 tree:add("e")
 tree:add("c")
 tree:add("d")

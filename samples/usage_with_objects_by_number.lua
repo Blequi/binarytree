@@ -6,7 +6,7 @@ local fruits = binarytree(function(a, b)
     return a.price - b.price
 end)
 
--- adding numbers to it
+-- adding "fruit objects" to it
 fruits:add({name = 'orange', price = 20})
 fruits:add({name = 'apple', price = 25})
 fruits:add({name = 'banana', price = 15})

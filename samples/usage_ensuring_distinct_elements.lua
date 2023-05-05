@@ -1,8 +1,9 @@
 -- loading the module
 local binarytree = require("binarytree")
 
--- creating a binary tree instance using the default comparer for numbers,
--- but ensuring elements are distinct
+-- creating a binary tree instance using
+-- the default comparer for numbers (first parameter = nil),
+-- but ensuring elements are distinct (second parameter = true)
 local tree = binarytree(nil, true)
 
 -- adding numbers to it
