@@ -965,22 +965,6 @@ print( tree:last() ) -- prints 3
 
 ## Unit Tests
 
-In order to run the unit tests, you need the following development dependencies:
-
-* `busted`
-
-    ```bash
-    luarocks install busted
-    ```
-
-After `busted` installation, open a terminal (or command prompt) in the **binarytree** directory and run:
-
-```bash
-lua test.lua
-```
-
-## Unit Tests
-
 In order to run the unit tests, you need [busted](https://github.com/lunarmodules/busted) (a test library). To install `busted`, run
 
 ```bash
