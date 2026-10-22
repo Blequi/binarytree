@@ -62,23 +62,23 @@ end)
 
 describe("binary tree initialization", function()
     it("should not be nil with a nil comparer", function()
-        assert.are_not.equals(nil, binarytree())    
+        assert.are_not.equals(nil, binarytree())
     end)
 
     it("should not be nil with a non-nil comparer and nil distinct", function()
-        assert.are_not.equals(nil, binarytree(function(a, b) return 0 end))    
+        assert.are_not.equals(nil, binarytree(function(a, b) return 0 end))
     end)
 
     it("should not be nil with a non-nil comparer and true distinct", function()
-        assert.are_not.equals(nil, binarytree(function(a, b) return 0 end, true))    
+        assert.are_not.equals(nil, binarytree(function(a, b) return 0 end, true))
     end)
 
     it("should not be nil with a non-nil comparer and false distinct", function()
-        assert.are_not.equals(nil, binarytree(function(a, b) return 0 end, false))    
+        assert.are_not.equals(nil, binarytree(function(a, b) return 0 end, false))
     end)
 
     it("should start with count as 0 provided a nil comparer", function()
-        assert.are.equals(0, binarytree().count)    
+        assert.are.equals(0, binarytree().count)
     end)
 
     it("should start with count as 0 provided a non-nil comparer and nil distinct", function()
@@ -94,7 +94,7 @@ describe("binary tree initialization", function()
     end)
 
     it("should start empty provided a nil comparer", function()
-        assert.True(binarytree():empty())    
+        assert.True(binarytree():empty())
     end)
 
     it("should start empty provided a non-nil comparer and nil distinct", function()
@@ -142,12 +142,30 @@ describe("binary tree's comparer property", function()
 end)
 
 describe("binary tree's count property", function()
+    it("should be of type number", function()
+        assert.are.equals("number", type(binarytree().count))
+    end)
+
     it("should be read-only if comparer is nil", function()
         assert.False(pcall(function() binarytree().count = function(a, b) return 1 end end))
     end)
 
     it("should be read-only if comparer is not-nil", function()
         assert.False(pcall(function() binarytree(function(a, b) return 1 end).count = nil end))
+    end)
+end)
+
+describe("binary tree's version property", function()
+    it("should be of type string", function()
+        assert.are.equals("string", type(binarytree().version))
+    end)
+
+    it("should be read-only if comparer is nil", function()
+        assert.False(pcall(function() binarytree().version = function(a, b) return 1 end end))
+    end)
+
+    it("should be read-only if comparer is not-nil", function()
+        assert.False(pcall(function() binarytree(function(a, b) return 1 end).version = nil end))
     end)
 end)
 
@@ -242,7 +260,7 @@ end)
 describe("binary tree with a single element", function()
     it("should match for numbers in forward direction", function()
         local values = {1, -0.5, -1, 0}
-        
+
         for i, v in ipairs(values) do
             local test_collection = {v}
             local tree = binarytree()
@@ -253,7 +271,7 @@ describe("binary tree with a single element", function()
 
     it("should match for numbers in backward direction", function()
         local values = {1, -0.5, -1, 0}
-        
+
         for i, v in ipairs(values) do
             local test_collection = {v}
             local tree = binarytree()
@@ -281,10 +299,10 @@ describe("clear method", function()
                 end
 
                 tree:clear()
-    
+
                 assert.are.equals(0, tree.count)
                 assert.True(tree:empty())
-    
+
                 for j, v in tree:iterator() do
                     assert.True(false)
                 end
@@ -309,10 +327,10 @@ describe("clear method", function()
                 end
 
                 tree:clear()
-    
+
                 assert.are.equals(0, tree.count)
                 assert.True(tree:empty())
-    
+
                 for j, v in tree:iterator(true) do
                     assert.True(false)
                 end
@@ -337,7 +355,7 @@ describe("contains method", function()
                 for k, v in ipairs(test_collection) do
                     tree:add(v)
                 end
-                
+
                 for k, v in ipairs(sorted_collection) do
                     assert.True(tree:contains(v))
                 end
@@ -360,7 +378,7 @@ describe("contains method", function()
                 for k, v in ipairs(test_collection) do
                     tree:add(v)
                 end
-                
+
                 assert.False(tree:contains(5))
             end
         end
@@ -381,7 +399,7 @@ describe("contains method", function()
                 for k, v in ipairs(test_collection) do
                     tree:add(v)
                 end
-                
+
                 assert.False(tree:contains(-1))
             end
         end
@@ -405,7 +423,7 @@ describe("remove method with nil 'all' parameter", function()
                     for k, v in ipairs(test_collection) do
                         tree:add(v)
                     end
-                    
+
                     for n, v in ipairs(work_collection) do
                         assert.are.equals(1, tree:remove(v))
                     end
@@ -466,7 +484,7 @@ describe("remove method with true 'all' parameter", function()
     end)
 
     it("should sort all permutations up to 5 elements in forward direction with one repeated element", function()
-        
+
         local sorted_collection_list = {
             {
                 {1, 1}
@@ -497,7 +515,7 @@ describe("remove method with true 'all' parameter", function()
                 for j, v in ipairs(sorted_collection) do
                     table.insert(work_collection, v)
                 end
-    
+
                 for test_collection in permutations(work_collection) do
                     local tree = binarytree()
                     for k, v in ipairs(test_collection) do
@@ -555,7 +573,7 @@ describe("binary tree construction", function()
     end)
 
     it("should sort all permutations up to 5 elements in forward direction with one repeated element", function()
-        
+
         local sorted_collection_list = {
             {1},
             {1, 1},
@@ -594,7 +612,7 @@ describe("binary tree construction", function()
     end)
 
     it("should sort all permutations up to 5 elements in backward direction with one repeated element", function()
-        
+
         local sorted_collection_list = {
             {1},
             {1, 1},
@@ -642,7 +660,7 @@ describe("binary tree construction", function()
             table.insert(sorted_values, v)
             tree:add(v)
         end
-        
+
         table.sort(sorted_values)
 
         assert_table_and_tree_are_forward_equals(sorted_values, tree)
@@ -658,13 +676,13 @@ describe("find method", function()
 
         for i, v in ipairs(values) do
             local found, element = tree:find(v)
-    
+
             assert.False(found)
             assert.are.equals(nil, element)
         end
     end)
 
-    
+
     it("should return true for elements that belong to collection, for all permutations up to 4 elements", function()
         local sorted_collection = {}
         for i = 1, 4 do
@@ -680,7 +698,7 @@ describe("find method", function()
                 for k, v in ipairs(test_collection) do
                     tree:add(v)
                 end
-                
+
                 for j, v in ipairs(test_collection) do
                     local found, element = tree:find(v)
 
@@ -691,10 +709,10 @@ describe("find method", function()
         end
     end)
 
-    
+
     it("should return false for elements that do not belong to collection, for all permutations up to 4 elements", function()
         local lookup_elements = {-1, 10, 3.2}
-        
+
         local sorted_collection = {}
         for i = 1, 4 do
             table.insert(sorted_collection, i)
@@ -709,7 +727,7 @@ describe("find method", function()
                 for k, v in ipairs(test_collection) do
                     tree:add(v)
                 end
-                
+
                 for j, v in ipairs(lookup_elements) do
                     local found, element = tree:find(v)
 
@@ -738,7 +756,7 @@ describe("find method", function()
         assert.True(found)
         assert.are.equals(one.a, element.a)
         assert.are.equals(one.b, element.b)
-        
+
         found, element = tree:find({a = 5})
 
         assert.True(found)
@@ -775,7 +793,7 @@ describe("find method", function()
 
         assert.False(found)
         assert.are.equals(nil, element)
-        
+
         found, element = tree:find({a = 3.2})
 
         assert.False(found)

@@ -1,4 +1,6 @@
 *.out
 *.xml
 *.html
-output/coverage/report/binarytree.lua
+luacov.report.out
+luacov.stats.out
+

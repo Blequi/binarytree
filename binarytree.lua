@@ -1,3 +1,31 @@
+-- The MIT License (MIT)
+--
+-- Copyright (c) 2023 - 2026 Blequi https://github.com/Blequi/binarytree
+--
+-- Permission is hereby granted, free of charge,
+-- to any person obtaining a copy of this software
+-- and associated documentation files (the "Software"),
+-- to deal in the Software without restriction, including without
+-- limitation the rights to use, copy, modify, merge, publish,
+-- distribute, sublicense, and/or sell copies of the Software,
+-- and to permit persons to whom the Software is furnished to do so,
+-- subject to the following conditions:
+--
+-- The above copyright notice and this permission notice
+-- shall be included in all copies or substantial portions
+-- of the Software.
+--
+-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+-- EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+-- OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+-- IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+-- FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+-- ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+-- DEALINGS IN THE SOFTWARE.
+
+local version = "0.0.3"
+
 local node = {}
 node.__index = node
 
@@ -65,7 +93,7 @@ local function get_left_most(n, depth)
             current = current:get_left()
         end
     end
-    
+
     return current, newdepth
 end
 
@@ -80,7 +108,7 @@ local function get_right_most(n, depth)
             current = current:get_right()
         end
     end
-    
+
     return current, newdepth
 end
 
@@ -130,21 +158,21 @@ local function forward_iterator(self)
     return coroutine.wrap(
         function()
             local root = self._root
-            
+
             if (root ~= nil) then
                 local state = { i = 0 }
-        
+
                 local left = root:get_left()
-        
+
                 if (left ~= nil) then
                     forward_iter_subtree(self, state, left, 1)
                 end
-                
+
                 state.i = state.i + 1
                 coroutine.yield(state.i, root:get_value())
-        
+
                 local right = root:get_right()
-        
+
                 if (right ~= nil) then
                     forward_iter_subtree(self, state, right, 1)
                 end
@@ -199,21 +227,21 @@ local function backward_iterator(self)
     return coroutine.wrap(
         function()
             local root = self._root
-            
+
             if (root ~= nil) then
                 local state = { i = 0 }
-        
+
                 local right = root:get_right()
-        
+
                 if (right ~= nil) then
                     backward_iter_subtree(self, state, right, 1)
                 end
-                
+
                 state.i = state.i + 1
                 coroutine.yield(state.i, root:get_value())
-        
+
                 local left = root:get_left()
-        
+
                 if (left ~= nil) then
                     backward_iter_subtree(self, state, left, 1)
                 end
@@ -278,7 +306,7 @@ local function remove_node(self, n)
 
     if (left ~= nil) then
         local left_rm = get_right_most(left)
-        
+
         if (parent == nil) then
             left:set_parent(nil)
             self._root = left
@@ -408,7 +436,7 @@ local function add(self, value)
                     error("This value is already in the collection. This collection was configured to allow only distinct elements.", 2)
                 else
                     local current = node.new(value)
-                    
+
                     local l = n:get_left()
                     if (l == nil) then
                         current:set_parent(n)
@@ -420,7 +448,7 @@ local function add(self, value)
                             n:set_right(current)
                         else
                             local right_of_left = get_right_most(l)
-                        
+
                             if (right_of_left == nil) then
                                 current:set_parent(l)
                                 l:set_right(current)
@@ -430,7 +458,7 @@ local function add(self, value)
                             end
                         end
                     end
-    
+
                     n = nil
                 end
             end
@@ -459,11 +487,12 @@ local function create(comparer, distinct)
 
     local data = nil
     data = {
-        
+
         -- properties
         comparer = comparer or default_comparer,
         count = 0,
         distinct = distinct,
+        version = version,
 
         -- methods
         add = function(self, value) add(data, value) end,
